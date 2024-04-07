@@ -1,0 +1,7 @@
+components.json
+postcss.config.json
+tailwind.config.json
+vite.config.js
+jsconfig.json
+.eslint.cjs
+.env
