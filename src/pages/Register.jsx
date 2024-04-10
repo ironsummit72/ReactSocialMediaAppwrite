@@ -1,21 +1,20 @@
-import { Button } from '@/shadcncomponents/ui/button';
+import { Button } from '@/shadcomponents/ui/button';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-import { account } from '../lib/appwrite';
+
 
 function Register() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch
-  } = useForm();
+    watch,reset} = useForm();
 
   const submitHandler = async (data) => {
     const { username, email, password } = data;
-    const response = await account.create(`[${username}]`, `${email}`, `${password}`);
-    console.log(response);
+    // const response = await account.create(`[${username}]`, `${email}`, `${password}`);
+    console.log(username,email,password);
   };
   return (
     <>

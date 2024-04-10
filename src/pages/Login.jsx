@@ -1,37 +1,98 @@
-import { Link } from "react-router-dom"
+import AuthService from '@/appwrite/AuthService';
+import { Button } from '@/shadcomponents/ui/button';
+import { useDispatch } from 'react-redux';
+import { login } from '@/redux/AuthSlice';
+
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+//TODO: auth remove later and do it in a better way
+
 function Login() {
+  // TODO: Form valididation use react-hook-form
+  const {
+    register,
+    formState: { isSubmitSuccessful },
+    watch,
+    handleSubmit,
+    getFieldState,
+    reset
+  } = useForm();
+  const auth = new AuthService();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const submitForm = async (data) => {
+    let loginResponse = auth.login(data.email, data.password);
+    if (loginResponse) {
+      const userData = await auth.getCurrentUserAccount();
+      if (userData) {
+        dispatch(login(userData));
+        navigate('/');
+      }
+    }
+  };
   return (
     <>
-    <section className="bg-gray-50">
+      <section className="bg-gray-50">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-            <div className="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0 ">
-                <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                    <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
-                        Sign in to your account
-                    </h1>
-                        <span className="text-red-500 relative top-2 font-semibold"></span>
-                        
-                    <form className="space-y-4 md:space-y-6" method="post" action="/login">
-                        <div>
-                            <label htmlFor="email" id="userlabel" className="block mb-2 text-sm font-medium text-gray-900 ">Your email</label>
-                            <input type="text" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="e.g. john" required=""/>
-                        </div>
-                        <div>
-                            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
-                            <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " required=""/>
-                        </div>
-                      
-                        <button type="submit" className="w-full  bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Sign in</button>
-                        <p className="text-sm font-light text-gray-500">
-                            Don’t have an account yet? <Link to="/register" className="font-medium  hover:underline hover:text-sky-600">Sign up</Link>
-                        </p>
-                    </form>
+          <div className="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0 ">
+            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
+                Sign in to your account
+              </h1>
+              <span className="text-red-500 relative top-2 font-semibold"></span>
+
+              <form
+                className="space-y-4 md:space-y-6"
+                noValidate
+                onSubmit={handleSubmit(submitForm)}>
+                <div>
+                  <label
+                    htmlFor="email"
+                    id="userlabel"
+                    className="block mb-2 text-sm font-medium text-gray-900 ">
+                    Your email
+                  </label>
+                  <input
+                    type="text"
+                    {...register('email')}
+                    id="email"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                    placeholder="e.g. john"
+                    required=""
+                  />
                 </div>
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block mb-2 text-sm font-medium text-gray-900 ">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    {...register('password')}
+                    id="password"
+                    placeholder="••••••••"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
+                    required=""
+                  />
+                </div>
+
+                <Button type="submit" className="w-full  font-medium  text-center ">
+                  Sign in
+                </Button>
+                <p className="text-sm font-light text-gray-500">
+                  Don’t have an account yet?{' '}
+                  <Link to="/register" className="font-medium  hover:underline hover:text-sky-600">
+                    Sign up
+                  </Link>
+                </p>
+              </form>
             </div>
+          </div>
         </div>
       </section>
     </>
-  )
+  );
 }
 
-export default Login
+export default Login;
