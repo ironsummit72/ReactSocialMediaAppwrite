@@ -1,35 +1,47 @@
 import AuthService from '@/appwrite/AuthService';
 import { Button } from '@/shadcomponents/ui/button';
 import { useDispatch } from 'react-redux';
-import { login } from '@/redux/AuthSlice';
-
+import { login } from '@/stateManager/redux/authSlice';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-//TODO: auth remove later and do it in a better way
+import { useEffect, useState } from 'react';
+import AlertDialog from '@/components/Alert';
+
+
 
 function Login() {
-  // TODO: Form valididation use react-hook-form
   const {
     register,
-    formState: { isSubmitSuccessful },
-    watch,
     handleSubmit,
-    getFieldState,
     reset
   } = useForm();
   const auth = new AuthService();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loginSuccess,setLoginSuccess]=useState(false);
+  const [isSubmitSuccessful,setIsSubmitSuccessful]=useState(false);
+
   const submitForm = async (data) => {
     let loginResponse = auth.login(data.email, data.password);
     if (loginResponse) {
       const userData = await auth.getCurrentUserAccount();
       if (userData) {
-        dispatch(login(userData));
-        navigate('/');
+         dispatch(login(userData)); 
+        setIsSubmitSuccessful(true)
+      }else{
+        setIsSubmitSuccessful(false)
       }
     }
   };
+  useEffect(()=>{
+    if(isSubmitSuccessful){
+      reset()
+      setLoginSuccess(true)
+      setTimeout(()=>{
+        navigate('/',{replace:true})
+      },1500)
+    }
+  },[isSubmitSuccessful])
   return (
     <>
       <section className="bg-gray-50">
@@ -89,6 +101,7 @@ function Login() {
               </form>
             </div>
           </div>
+        {loginSuccess&&<AlertDialog title={'Login Success'} description={'logged in successfully redirecting to profile page'}/>}
         </div>
       </section>
     </>
