@@ -1,4 +1,4 @@
-import AppwriteService, { ID } from './config';
+import AppwriteService from './config';
 
 export default class AuthService extends AppwriteService {
   async getCurrentUserAccount() {
@@ -9,9 +9,9 @@ export default class AuthService extends AppwriteService {
       return null;
     }
   }
-  async createUserAccount(username, email, password) {
+  async createUserAccount(username,fullName, email, password) {
     try {
-      return await this.account.create(ID.unique(), email, password, username);
+      return await this.account.create(username, email, password, fullName);
     } catch (error) {
       console.log(error);
     }
