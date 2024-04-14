@@ -1,10 +1,10 @@
 import { Alert, AlertDescription, AlertTitle } from '@/shadcomponents/ui/alert';
 
 
-function AlertDialog({title, description,varient=''}) {
+function AlertDialog({title,className, description,varient=''}) {
   return (
     <>
-      <Alert varient={varient}>
+      <Alert className={className} title={title} description={description}varient={varient}>
         <AlertTitle>{title}</AlertTitle>
         <AlertDescription>
           {description}
