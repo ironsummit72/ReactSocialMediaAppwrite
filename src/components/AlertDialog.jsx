@@ -7,18 +7,17 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
 } from '@/shadcomponents/ui/alert-dialog';
+
 
 export default function CustomAlertDialog({
   triggerChild,
   title,
   description,
-  onContinueaHandler
+  onContinueaHandler,className,open,onOpenChange
 }) {
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>{triggerChild}</AlertDialogTrigger>
+    <AlertDialog open={open} onOpenChange={onOpenChange}  >
       <AlertDialogContent className="bg-grey-500">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-white">{title}</AlertDialogTitle>
