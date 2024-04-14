@@ -1,20 +1,48 @@
 import { Button } from '@/shadcomponents/ui/button';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-
-
-
+import AuthService from '@/appwrite/AuthService'
+import { useState } from 'react';
+import AlertDialog from '@/components/Alert';
+import UserService from '@/appwrite/UserService';
 function Register() {
+  const authService=new AuthService();
+  const userService=new UserService();
+  const navigate=useNavigate()
+  const [error,setErrorMessage]=useState('');
+  const [registerSuccess,setRegisterSuccess]=useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch,reset} = useForm();
+    watch,
+    reset
+  } = useForm();
 
-  const submitHandler = async (data) => {
-    const { username, email, password } = data;
+  const submitHandler =  (data) => {
+    const { username, email, password, firstname, lastname } = data;
     // const response = await account.create(`[${username}]`, `${email}`, `${password}`);
-    console.log(username,email,password);
+    const authRes =  authService.createUserAccount(
+      username,
+      firstname + ' ' + lastname,
+      email,
+      password
+    );
+  authRes.then((registerResponse)=>{
+    if(registerResponse)
+    {
+      console.log(registerResponse);
+      userService.createUser(registerResponse.$id)
+      setRegisterSuccess(true)
+      reset()
+      setTimeout(()=>{
+        navigate('/login',{replace:true})
+      },1500)
+    }
+  }).catch((err)=>{
+    console.log(err.message);
+    setErrorMessage(err.message)
+  })
   };
   return (
     <>
@@ -25,6 +53,7 @@ function Register() {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
                 Create and account
               </h1>
+              <span className="text-red-500 relative top-2 font-semibold">{error}</span>
               <form
                 className="space-y-4 md:space-y-6"
                 onSubmit={handleSubmit(submitHandler)}
@@ -113,6 +142,9 @@ function Register() {
                       required: {
                         value: true,
                         message: 'Please Enter your email'
+                      }, pattern:{
+                        value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                        message: 'Invalid email address',
                       }
                     })}
                     id="email"
@@ -135,7 +167,8 @@ function Register() {
                       required: {
                         value: true,
                         message: 'Please Enter your password'
-                      }
+                      },
+                      minLength:{value:8,message:'set password which should be greater than or equal to 8 characters'}
                     })}
                     id="password"
                     placeholder="••••••••"
@@ -183,6 +216,7 @@ function Register() {
               </form>
             </div>
           </div>
+          {registerSuccess&&<AlertDialog className={'w-[50%] bg-green-50 text-green-600 '} title={'Register Success'} description={'registered successfully redirecting to login page'}/>}
         </div>
       </section>
     </>
