@@ -1,5 +1,5 @@
 import envconf from '@/conf/envConf';
-import { Client, Account, Databases, Storage } from 'appwrite';
+import { Client, Account, Databases, Storage, Query } from 'appwrite';
 export default class AppwriteService {
   client = new Client();
   databases = new Databases(this.client);
@@ -11,5 +11,4 @@ export default class AppwriteService {
   }
 }
 
-
-export { ID } from 'appwrite';
+export { ID, Query } from 'appwrite';
