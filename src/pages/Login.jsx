@@ -5,41 +5,71 @@ import { login } from '@/stateManager/redux/authSlice';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import AlertDialog from '@/components/Alert';
-
-
-
+import { useToast } from "@/shadcomponents/ui/use-toast"
+import UserService from '@/appwrite/UserService';
 function Login() {
+  const { toast } = useToast()
   const {
     register,
     handleSubmit,
-    reset
+    reset,
+    formState:{errors}
   } = useForm();
   const auth = new AuthService();
+  const userService=new UserService();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [loginSuccess,setLoginSuccess]=useState(false);
+  const [error,setErrorMessage]=useState('');
+
   const [isSubmitSuccessful,setIsSubmitSuccessful]=useState(false);
 
-  const submitForm = async (data) => {
+  const submitForm =  (data) => {
     let loginResponse = auth.login(data.email, data.password);
-    if (loginResponse) {
-      const userData = await auth.getCurrentUserAccount();
-      if (userData) {
-         dispatch(login(userData)); 
-        setIsSubmitSuccessful(true)
-      }else{
-        setIsSubmitSuccessful(false)
+    loginResponse.then((loginResp)=>{
+      if (loginResp) {
+        const userData =  auth.getCurrentUserAccount();
+       userData.then((userResponse)=>{
+        setErrorMessage('')
+        if (userResponse) {
+          dispatch(login(userResponse)); 
+          setTimeout(()=>{
+           userService.checkUserDisplay(userResponse.$id).then((response)=>{
+            if(response.documents[0].displayPictureFileId===null)
+            {
+              navigate('/setprofile',{replace:true})
+            }else{
+              navigate('/')
+            }
+          }).catch((error)=>{console.log(error)})
+          },1500)
+          userService.checkUserDisplay().then(resp=>{console.log(resp)}).catch(err=>{console.log(err)})
+         setIsSubmitSuccessful(true)
+         toast({
+          title:'Login Successful',
+          description:'Redirecting to profile',
+         })
+       }else{
+        toast({
+          variant: "destructive",
+          title:'Login Unsuccessful',
+          description:'Please Try again',
+         })
+         setIsSubmitSuccessful(false)
+       }
+       }).catch((error)=>{
+      setErrorMessage(error.message)
+    
+       })
       }
-    }
+    }).catch((error)=>{
+      setErrorMessage(error.message)
+    
+    })
+
   };
   useEffect(()=>{
     if(isSubmitSuccessful){
       reset()
-      setLoginSuccess(true)
-      setTimeout(()=>{
-        navigate('/',{replace:true})
-      },1500)
     }
   },[isSubmitSuccessful])
   return (
@@ -51,7 +81,7 @@ function Login() {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
                 Sign in to your account
               </h1>
-              <span className="text-red-500 relative top-2 font-semibold"></span>
+              <span className="text-red-500 relative top-2 font-semibold">{error}</span>
 
               <form
                 className="space-y-4 md:space-y-6"
@@ -66,7 +96,15 @@ function Login() {
                   </label>
                   <input
                     type="text"
-                    {...register('email')}
+                    {...register('email', {
+                      required: {
+                        value: true,
+                        message: 'Please Enter your email'
+                      },pattern:{
+                        value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                        message: 'Invalid email address',
+                      }
+                    })}
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     placeholder="e.g. john"
@@ -85,7 +123,7 @@ function Login() {
                     id="password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                    required=""
+                    required
                   />
                 </div>
 
@@ -101,7 +139,6 @@ function Login() {
               </form>
             </div>
           </div>
-        {loginSuccess&&<AlertDialog title={'Login Success'} description={'logged in successfully redirecting to profile page'}/>}
         </div>
       </section>
     </>
