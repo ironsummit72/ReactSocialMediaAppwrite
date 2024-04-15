@@ -1,25 +1,15 @@
 import { Input } from '@/shadcomponents/ui/input';
-import test from '../test/p.jpg';
 import companylogo from '../assets/companylogo/logo.png';
 import { Link, NavLink } from 'react-router-dom';
 import { AiFillHome } from 'react-icons/ai';
 import { IoPeopleOutline } from 'react-icons/io5';
 import { MdOndemandVideo } from 'react-icons/md';
 import { Bell, MessageSquare, Menu } from 'lucide-react';
-import PostService from '@/appwrite/PostService';
-import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-
+import DisplayPicture from './DisplayPicture';
 function Navbar() {
-  const [profilePic, setProfilePic] = useState('');
-  const userID = useSelector((state) => state.userData);
-  const postservice = new PostService();
-  useEffect(() => {
-    postservice.getProfilePicture(userID.$id).then((res) => setProfilePic(res.href));
-  }, []);
   return (
     <>
-      <div className="nav w-screen h-16 shadow-lg ">
+      <div className="nav w-screen h-16 shadow-lg fixed z-20 bg-white">
         <div className="w-[100%] h-full flex items-center gap-10">
           <Link to="/" className="companylogo h-full w-16 ">
             <img className="w-full h-full" src={companylogo} alt="" />
@@ -60,7 +50,7 @@ function Navbar() {
               <MessageSquare fill={'true'} size={25} />
             </div>
             <div className="notification h-10 w-10 bg-slate-300 rounded-full flex justify-center items-center">
-              <img className="w-full h-full rounded-full" src={profilePic} alt="" />
+             <DisplayPicture className="w-full h-full rounded-full "/>
             </div>
           </div>
         </div>
