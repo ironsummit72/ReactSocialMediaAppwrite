@@ -1,13 +1,22 @@
-import { Input } from '@/shadcomponents/ui/input'
-
-import img from '@/test/p.jpg'
-import companylogo from '../assets/companylogo/logo.png'
-import { Link ,NavLink } from 'react-router-dom'
-import { AiFillHome } from "react-icons/ai";
-import { IoPeopleOutline,IoVideocam } from "react-icons/io5";
-import { MdOndemandVideo } from "react-icons/md";
+import { Input } from '@/shadcomponents/ui/input';
+import test from '../test/p.jpg';
+import companylogo from '../assets/companylogo/logo.png';
+import { Link, NavLink } from 'react-router-dom';
+import { AiFillHome } from 'react-icons/ai';
+import { IoPeopleOutline } from 'react-icons/io5';
+import { MdOndemandVideo } from 'react-icons/md';
+import { Bell, MessageSquare, Menu } from 'lucide-react';
+import PostService from '@/appwrite/PostService';
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 
 function Navbar() {
+  const [profilePic, setProfilePic] = useState('');
+  const userID = useSelector((state) => state.userData);
+  const postservice = new PostService();
+  useEffect(() => {
+    postservice.getProfilePicture(userID.$id).then((res) => setProfilePic(res.href));
+  }, []);
   return (
     <>
       <div className="nav w-screen h-16 shadow-lg ">
@@ -26,26 +35,38 @@ function Navbar() {
           <div className="navlinks h-full w-[40%] flex items-center justify-center gap-16">
             <NavLink to="/" className={`hover:bg-gray-100 p-3`}>
               {({ isActive, isPending, isTransitioning }) => (
-               
-                <AiFillHome size={'2.5em'} color={isActive?'#1937e3':'black'}/>
+                <AiFillHome size={'2.5em'} color={isActive ? '#1937e3' : 'black'} />
               )}
             </NavLink>
             <NavLink to="/people" className={`hover:bg-gray-100 p-3`}>
               {({ isActive, isPending, isTransitioning }) => (
-                <IoPeopleOutline size={'2.5em'} color={isActive?'#1937e3':'black'}/>
+                <IoPeopleOutline size={'2.5em'} color={isActive ? '#1937e3' : 'black'} />
               )}
             </NavLink>
             <NavLink to="/watch" className={`hover:bg-gray-100 p-3`}>
               {({ isActive, isPending, isTransitioning }) => (
-                <MdOndemandVideo size={'2.5em'} color={isActive?'#1937e3':'black'}/>
+                <MdOndemandVideo size={'2.5em'} color={isActive ? '#1937e3' : 'black'} />
               )}
             </NavLink>
           </div>
-          <div></div>
+          <div className="h-full w-[30%] flex items-center gap-5 ">
+            <div className="notification h-10 w-10 bg-slate-300 rounded-full flex justify-center items-center">
+              <Menu fill={'true'} size={25} />
+            </div>
+            <div className="notification h-10 w-10 bg-slate-300 rounded-full flex justify-center items-center">
+              <Bell fill={'true'} size={25} />
+            </div>
+            <div className="notification h-10 w-10 bg-slate-300 rounded-full flex justify-center items-center">
+              <MessageSquare fill={'true'} size={25} />
+            </div>
+            <div className="notification h-10 w-10 bg-slate-300 rounded-full flex justify-center items-center">
+              <img className="w-full h-full rounded-full" src={profilePic} alt="" />
+            </div>
+          </div>
         </div>
       </div>
     </>
   );
 }
 
-export default Navbar
+export default Navbar;
