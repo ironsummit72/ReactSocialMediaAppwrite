@@ -14,7 +14,7 @@ export default function CustomAlertDialog({
   triggerChild,
   title,
   description,
-  onContinueaHandler,className,open,onOpenChange
+  onContinueHandler,className,open,onOpenChange,onCancelHandler
 }) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}  >
@@ -24,12 +24,12 @@ export default function CustomAlertDialog({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="hover:bg-red-600 hover:text-white">
+          <AlertDialogCancel onClick={onCancelHandler} className="hover:bg-red-600 hover:text-white">
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
             className="hover:bg-green-600 hover:text-white"
-            onClick={onContinueaHandler}>
+            onClick={onContinueHandler}>
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>

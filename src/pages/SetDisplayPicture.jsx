@@ -112,7 +112,7 @@ function SetDisplayPicture() {
           </ul>
         }
       </div>
-      <CustomAlertDialog title={'Set Image'} description={'This will be your display picture. Other user can identify you using this picture '} onContinueaHandler={onContinueHandler} open={openDialog} />
+      <CustomAlertDialog title={'Set Image'} onCancelHandler={()=>{setOpenDialog(false)}} description={'This will be your display picture. Other user can identify you using this picture '} onContinueHandler={onContinueHandler} open={openDialog} />
       <Button onClick={uploadImage} variant="outline" className="absolute bottom-5 right-14">
         Next
       </Button>

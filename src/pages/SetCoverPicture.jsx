@@ -119,7 +119,7 @@ function SetCoverPicture() {
           </ul>
         }
       </div>
-      <CustomAlertDialog open={openDialog} onContinueaHandler={onContinueHandler} title={'Are you Sure'} description={'this image will be set as cover picture'}/>
+      <CustomAlertDialog open={openDialog}  onCancelHandler={()=>{setOpenDialog(false)}}  onContinueHandler={onContinueHandler} title={'Are you Sure'} description={'this image will be set as cover picture'}/>
       <Button onClick={uploadImage} variant="outline" className="absolute bottom-5 right-14">
         Finish
       </Button>
