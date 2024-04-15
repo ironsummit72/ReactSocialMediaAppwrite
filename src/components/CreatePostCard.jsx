@@ -4,9 +4,9 @@ import { Image, Smile, Radio } from 'lucide-react';
 function CreatePostCard({ className, username = '', whatsOnMindOnCLick }) {
   return (
     <>
-      <div className={`cardContainer w-[50%]  h-40 bg-white rounded-md shadow-2xl relative top-10`}>
+      <div className={`cardContainer w-[50%]  h-40 bg-white rounded-md shadow-2xl relative top-10 ${className}`}>
         <div className="flex items-center  gap-5 h-14 mt-5">
-          <DisplayPicture className={`w-12 h-12 rounded-full ml-5  ${className}`} />
+          <DisplayPicture className={`w-12 h-12 rounded-full ml-5  `} />
           <div
             onClick={whatsOnMindOnCLick}
             className="w-[80%] h-10 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-600 flex items-center p-2">{`What's on your mind, ${username}?`}</div>
