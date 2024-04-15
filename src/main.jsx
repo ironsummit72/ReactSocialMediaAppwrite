@@ -8,11 +8,11 @@ import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import ProtectedAuth from './components/ProtectedAuth.jsx';
 import Home from './pages/Home.jsx';
-import Profile from './pages/Profile.jsx';
 import SetProfile from './pages/SetProfile.jsx';
 import { Toaster } from "@/shadcomponents/ui/toaster"
 import SetDisplayPicture from './pages/SetDisplayPicture.jsx';
 import SetCoverPicture from './pages/SetCoverPicture.jsx';
+import Feed from './pages/Feed.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/',
-        element:<ProtectedAuth> <Profile /></ProtectedAuth>
+        element:<ProtectedAuth> <Feed /></ProtectedAuth>
       },
       {
         path: '/setprofile',
