@@ -36,7 +36,7 @@ function Login() {
            userService.checkUserDisplay(userResponse.$id).then((response)=>{
             if(response.documents[0].displayPictureFileId===null)
             {
-              navigate('/setprofile',{replace:true})
+              navigate('/setprofile/dp',{replace:true})
             }else{
               navigate('/')
             }
