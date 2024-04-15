@@ -62,11 +62,11 @@ function SetCoverPicture() {
 
 
   return (
-    <div className="w-screen flex gap-20 flex-col justify-center items-center bg-gray-900 h-screen">
+    <div className="w-screen flex gap-20 flex-col justify-center items-center bg-gray-900 h-screen overflow-hidden">
       <div className="imgPreviewContainer relative left-80 w-[100vw] h-[50%] flex  border-orange-600 ">
         <AspectRatio className="w-[60%] h-[50vh] border border-1 border-white" ratio={16 / 9}>
           <img
-            className="w-full h-full rounded-md object-cover"
+            className="w-full h-full rounded-md object-cover object-top"
             src={previewImageFile ?? noimage}
             alt=""
           />
