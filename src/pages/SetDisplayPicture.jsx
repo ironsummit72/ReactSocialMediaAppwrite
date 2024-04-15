@@ -1,17 +1,24 @@
 import { Input } from '@/shadcomponents/ui/input';
 import { Label } from '@/shadcomponents/ui/label';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MdOutlineFileUpload } from 'react-icons/md';
 import { MdOutlineCancel } from 'react-icons/md';
 import noimage from '@/assets/noimage.svg';
-import { useOutletContext } from 'react-router-dom';
-
+import { Button } from '@/shadcomponents/ui/button';
+import CustomAlertDialog from '@/components/AlertDialog';
+import PostService from '@/appwrite/PostService';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 function SetDisplayPicture() {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [previewImageFile, setPreviewImageFile] = useState(null);
-  const [count,setCount] = useOutletContext()
-  useEffect(()=>{setCount(0)},[])
+  const [openDialog, setOpenDialog] = useState(false);
+  const userID = useSelector((state) => state.userData);
+  const navigate=useNavigate();
+  const [imageFile, SetImage] = useState(null);
+  const postSer = new PostService();
+
   const onCancelImageHandler = () => {
     setSelectedFiles(null);
     setPreviewImageFile(null);
@@ -25,13 +32,29 @@ function SetDisplayPicture() {
     setDragActive(false);
     setSelectedFiles([...event.dataTransfer.files]);
     setPreviewImageFile(URL.createObjectURL(event.dataTransfer.files[0]));
+    SetImage(event.dataTransfer.files[0]);
   };
   const handleFileUpload = (event) => {
-    // Your file processing/upload code here
     setSelectedFiles([...event.target.files]);
     setPreviewImageFile(URL.createObjectURL(event.target.files[0]));
+    SetImage(event.target.files[0]);
   };
-  console.log(count);
+
+  const uploadImage = () => {
+    if (imageFile !== null) {
+      setOpenDialog(true);
+    }
+  };
+  const onContinueHandler = () => {
+    postSer
+      .setDisplayPicture(imageFile, userID.$id)
+      .then((res) => {
+        if(res){
+          navigate('/setprofile/cover',{replace:true});
+        }
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div className="w-screen flex gap-20 flex-col justify-center items-center bg-gray-900 h-screen">
@@ -65,7 +88,7 @@ function SetDisplayPicture() {
             className="border-yellow-50 border text-yellow-50 p-3 rounded-sm">
             Choose a Image
             <Input
-              accept="image"
+              accept="image/*"
               onChange={handleFileUpload}
               type="file"
               className="sr-only"
@@ -75,21 +98,24 @@ function SetDisplayPicture() {
         </div>
         {
           <ul>
-            <hr  className="w-auto relative top-2"/>
+            <hr className="w-auto relative top-2" />
             {selectedFiles?.map((file) => {
               return (
-                
-                  <div className="flex mt-3 gap-2 items-center justify-center" key={file.name}>
-                    <li className="text-yellow-50">{file.name}</li>
-                    <button onClick={onCancelImageHandler}>
-                      <MdOutlineCancel color="red" />
-                    </button>
-                  </div>
+                <div className="flex mt-3 gap-2 items-center justify-center" key={file.name}>
+                  <li className="text-yellow-50">{file.name}</li>
+                  <button onClick={onCancelImageHandler}>
+                    <MdOutlineCancel color="red" />
+                  </button>
+                </div>
               );
             })}
           </ul>
         }
       </div>
+      <CustomAlertDialog title={'Set Image'} description={'This will be your display picture. Other user can identify you using this picture '} onContinueaHandler={onContinueHandler} open={openDialog} />
+      <Button onClick={uploadImage} variant="outline" className="absolute bottom-5 right-14">
+        Next
+      </Button>
     </div>
   );
 }
