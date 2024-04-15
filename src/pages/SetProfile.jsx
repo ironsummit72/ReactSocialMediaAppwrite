@@ -1,11 +1,5 @@
-import { Outlet, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-
+import { Outlet } from 'react-router-dom';
 function SetProfile() {
-  const navigate = useNavigate();
-  useEffect(() => {
-    navigate('/setprofile/dp', { replace: true });
-  }, []);
   return (
     <>
       <Outlet />
