@@ -8,7 +8,7 @@ function SideNavigation() {
   const userId = useSelector((state) => state.userData.name);
 
   return (
-    <div className=" w-80 h-full  bg-gray-100 fixed z-2 top-0 left-0">
+    <div className=" w-80 h-auto min-h-screen m-0 p-0  bg-gray-100 sticky overflow-auto  top-0 left-0">
       <ul className="mt-24 w-full h-full flex flex-col gap-10 items-center rounded-lg">
         <li className="hover:bg-gray-300 w-[90%] rounded-md p-2 flex items-center">
           <Button asChild variant="ghost" className="w-full">
