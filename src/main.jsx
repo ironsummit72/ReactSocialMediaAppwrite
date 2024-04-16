@@ -6,7 +6,7 @@ import {Provider} from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
-import ProtectedAuth from './components/ProtectedAuth.jsx';
+import ProtectedAuth from './Auth/ProtectedAuth.jsx';
 import Home from './pages/Home.jsx';
 import SetProfile from './pages/SetProfile.jsx';
 import { Toaster } from "@/shadcomponents/ui/toaster"
