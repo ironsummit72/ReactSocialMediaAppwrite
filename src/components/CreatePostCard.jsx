@@ -3,7 +3,7 @@ import { Button } from '@/shadcomponents/ui/button';
 import { Image, Smile, Radio } from 'lucide-react';
 import { useSelector } from 'react-redux';
 
- function CreatePostCard({ className, whatsOnMindOnCLick }) {
+ function CreatePostCard({ className, whatsOnMindOnCLick,createPost }) {
   const username = useSelector((state) => state.userData.$id);
   return (
     <>
@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux';
         </div>
         <hr className="h-px my-1 mt-3 bg-gray-200 border-0 dark:bg-gray-700" />
         <div className="createSection flex gap-28 items-center w-[90%] h-16 m-0 m-auto ">
-          <Button variant="ghost">
+          <Button variant="ghost" onClick={whatsOnMindOnCLick}>
             <Image color="#43A047" className="mr-2 h-4 w-4" />
             Photo/video
           </Button>
