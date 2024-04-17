@@ -41,13 +41,7 @@ function CreatePostDialog({
   const handleDrop = (event) => {
     event.preventDefault();
     setDragActive(false);
-    //setSelectedFiles([...event.dataTransfer.files]);
-    //setPreviewImageFile(URL.createObjectURL(event.dataTransfer.files[0]));
-    //SetImage(event.dataTransfer.files[0]);
    setSelectedFiles([...event.dataTransfer.files])
-
-  // console.log([...URL.createObjectURL(event.dataTransfer.files)]);//
-  selectedFiles.map(file =>{console.log(URL.createObjectURL(file));console.log(file.name);});
   }
   const handleFileUpload=(event) => {
     setSelectedFiles([...event.target.files])
