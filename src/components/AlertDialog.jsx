@@ -11,7 +11,6 @@ import {
 
 
 export default function CustomAlertDialog({
-  triggerChild,
   title,
   description,
   onContinueHandler,className,open,onOpenChange,onCancelHandler
