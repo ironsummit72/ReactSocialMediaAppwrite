@@ -1,7 +1,10 @@
 import DisplayPicture from './DisplayPicture';
 import { Button } from '@/shadcomponents/ui/button';
 import { Image, Smile, Radio } from 'lucide-react';
-function CreatePostCard({ className, username = '', whatsOnMindOnCLick }) {
+import { useSelector } from 'react-redux';
+
+ function CreatePostCard({ className, whatsOnMindOnCLick }) {
+  const username = useSelector((state) => state.userData.$id);
   return (
     <>
       <div className={`cardContainer w-[70%] h-40 bg-white rounded-md shadow-2xl relative top-10 ${className}`}>
