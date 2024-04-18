@@ -1,13 +1,8 @@
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
 } from '@/shadcomponents/ui/alert-dialog';
 import { Button } from '@/shadcomponents/ui/button';
 import { X, Earth, Users, Lock,ImageUp } from 'lucide-react';
@@ -41,16 +36,27 @@ function CreatePostDialog({
   const handleDrop = (event) => {
     event.preventDefault();
     setDragActive(false);
-   setSelectedFiles([...event.dataTransfer.files])
+    if(event.dataTransfer.files.length>10)
+    {
+      alert('you can only upload 10 images and videos in one post')
+    }else{
+
+      setSelectedFiles([...event.dataTransfer.files])
+    }
   }
   const handleFileUpload=(event) => {
-    setSelectedFiles([...event.target.files])
+    if(event.target.files.length>10)
+    {
+      alert('you can only upload 10 images and videos in one post')
+    }else{
+      setSelectedFiles([...event.target.files])
+    }
   }
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="bg-white h-[70%] overflow-auto overflow-x-hidden no-scrollbar">
-        <AlertDialogHeader className="flex-col   ">
-          <div className={`h-20 flex justify-center items-center border-b-2`}>
+
+      <AlertDialogContent className="h-[90%]">
+      <div className={`h-10 flex justify-center items-center border-b-2`}>
             <h1 className="font-bold text-lg">Create Post</h1>
             <Button
               onClick={onCancelHandler}
@@ -59,7 +65,7 @@ function CreatePostDialog({
               <X />
             </Button>
           </div>
-          <div className="h-20 profileInfo sticky top-0  bg-white p-2 ">
+          <div className="h-20 profileInfo bg-white p-2 ">
             <DisplayPicture className={`w-14 h-14 rounded-full`} />
             <h1 className="font-semibold relative bottom-14 left-16">{userData.name}</h1>
             <Select>
@@ -88,14 +94,16 @@ function CreatePostDialog({
               </SelectContent>
             </Select>
           </div>
+
           <div className="cap overflow-auto ">
             <Textarea className="border-none outline-0 text-md focus:outline-0 resize-none" placeholder={`What's on your mind, ${userData.name.split(' ')[0]}?`}/>
           </div>
-          <div className="addcontent w-full border border-gray-600 rounded-lg min-h-[25rem] flex justify-center items-center" onDragOver={handleDrag} onDragEnter={handleDrag} onDragLeave={handleDrag} onDrop={handleDrop} >
-           {selectedFiles.length===0? <div  className={`w-[98%] h-[98%] bg-gray-100 hover:bg-gray-200 ${dragActive?"bg-gray-500":''} cursor-auto 400 rounded-lg m-1 flex justify-center items-center`}>
+        <AlertDialogHeader className="flex-col   h-full  overflow-x-hidden no-scrollbar">
+          <div className="addcontent w-full h-full border  rounded-lg min-h-[70rem]  flex justify-center items-start" onDragOver={handleDrag} onDragEnter={handleDrag} onDragLeave={handleDrag} onDrop={handleDrop} >
+           {selectedFiles.length===0? <div  className={`w-[98%] h-[38%] border-gray-600 bg-gray-100 hover:bg-gray-200 ${dragActive?"bg-gray-500":''} cursor-auto 400 rounded-lg m-1 flex justify-center items-center`}>
             <Label
             htmlFor="upload-dp"
-            className="border-red-500 h-full w-full flex items-center border text-black font-medium text-lg p-3 rounded-sm flex-col justify-center">
+            className="border-gray-500 h-full  w-full flex items-center border text-black font-medium text-lg p-3 rounded-sm flex-col justify-center">
               <ImageUp/>
             Add photos/videos
             <span className="block text-sm text-gray-500">or drag and drop</span>
@@ -106,23 +114,23 @@ function CreatePostDialog({
               className="sr-only"
               id="upload-dp"
               multiple
-            />
+              />
           </Label>
             </div>:
-            <div className={`w-[98%] h-[98%] gap-5  rounded-lg mediacontent grid grid-cols-2 grid-rows-3`}>
+            <div className={`w-[98%] h-full rounded-lg mediacontent grid grid-cols-2 grid-rows-auto gap-x-2 gap-y-2`}>
              {selectedFiles.map((file)=>{
-              if(file.type.split('/')[0]==='video'){
-                return <video className='w-60 rounded-md' key={file.name} autoPlay={true} muted={true} src={URL.createObjectURL(file)}/>
-              }else{
-                return <img className='w-60 rounded-md' key={file.name} src={URL.createObjectURL(file)} alt="" />
-              }
-             })}
+               if(file.type.split('/')[0]==='video'){
+                 return <video className='w-60 rounded-md' key={file.name} autoPlay={true} muted={true} src={URL.createObjectURL(file)}/>
+                }else{
+                  return <img className='w-60 rounded-md' key={file.name} src={URL.createObjectURL(file)} alt="" />
+                }
+              })}
               </div>}
           </div>
         </AlertDialogHeader>
-        <AlertDialogFooter className={`sticky bottom-0`}>
-          <div className="buttonContainer w-full bg-white p-5 relative top-10 ">
-          <Button className="w-full p-5">Post</Button>
+        <AlertDialogFooter className={`bg-red-500`}>
+          <div className="buttonContainer w-full bg-red-500  relative  ">
+          <Button type='submit' className="w-full p-5">Post</Button>
           </div>
         </AlertDialogFooter>
       </AlertDialogContent>
