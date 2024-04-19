@@ -7,7 +7,8 @@ import { X, Earth, Users, Lock, ImageUp } from 'lucide-react';
 import DisplayPicture from '@/components/DisplayPicture';
 import { useSelector } from 'react-redux';
 import { useForm,Controller } from 'react-hook-form';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+
 import {
   Select,
   SelectContent,
@@ -22,12 +23,15 @@ import { Input } from '@/shadcomponents/ui/input';
 import { Label } from '@/shadcomponents/ui/label';
 import { Form } from '@/shadcomponents/ui/form';
 import PostService from '@/appwrite/PostService';
+import { dialogContext } from '@/context/dialogContext';
 
-function CreatePostDialog({ open, onOpenChange, onCancelHandler }) {
+function CreatePostDialog() {
   const postServ=new PostService()
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [dragActive, setDragActive] = useState(false);
   const userData = useSelector((state) => state.userData);
+  
+  const {postDialogOpen,setPostDialogOpen}=useContext(dialogContext);
  
   const handleDrag = (event) => {
     event.preventDefault();
@@ -63,6 +67,7 @@ function CreatePostDialog({ open, onOpenChange, onCancelHandler }) {
       {
         form.reset()
         setSelectedFiles([])
+        setPostDialogOpen(false);
       }
     }).catch((err)=>{console.log(err);})
    }
@@ -73,12 +78,12 @@ function CreatePostDialog({ open, onOpenChange, onCancelHandler }) {
     
   } 
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
+    <AlertDialog open={postDialogOpen}>
       <AlertDialogContent className="h-[90%] flex-col items-start">
         <div className={`h-10  flex justify-center items-center border-b-2`}>
           <h1 className="font-bold text-lg">Create Post</h1>
           <Button
-            onClick={onCancelHandler}
+            onClick={()=>{setPostDialogOpen(false)}}
             variant="ghost"
             className="w-14 h-14 rounded-full relative left-32">
             <X />

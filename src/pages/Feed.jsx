@@ -6,6 +6,7 @@ import SideNavigation from '@/components/SideNavigation';
 import StoryContainer from '@/components/containers/StoryContainer';
 import CreatePostDialog from '@/components/Dialogs/CreatePostDialog';
 import { useState } from 'react';
+import { dialogContext } from '@/context/dialogContext';
 export default function Feed() {
   const [postDialogOpen,setPostDialogOpen]=useState(false);
   const createPostHandler=()=>{
@@ -21,7 +22,9 @@ export default function Feed() {
             <CreateStoryCard />
           </StoryContainer>
           <CreatePostCard className={`m-0 m-auto`} username=""   whatsOnMindOnCLick={createPostHandler}/>
-          <CreatePostDialog open={postDialogOpen} onCancelHandler={()=>{setPostDialogOpen(false)}}/>
+          <dialogContext.Provider value={{postDialogOpen,setPostDialogOpen}}>
+          <CreatePostDialog/>
+          </dialogContext.Provider>
         </Container>
       </div>
     </>
