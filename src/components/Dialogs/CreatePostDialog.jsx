@@ -21,11 +21,14 @@ import { Textarea } from '@/shadcomponents/ui/textarea';
 import { Input } from '@/shadcomponents/ui/input';
 import { Label } from '@/shadcomponents/ui/label';
 import { Form } from '@/shadcomponents/ui/form';
+import PostService from '@/appwrite/PostService';
 
 function CreatePostDialog({ open, onOpenChange, onCancelHandler }) {
+  const postServ=new PostService()
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [dragActive, setDragActive] = useState(false);
   const userData = useSelector((state) => state.userData);
+ 
   const handleDrag = (event) => {
     event.preventDefault();
     setDragActive(event.type === 'dragover' || event.type === 'dragenter');
@@ -46,11 +49,28 @@ function CreatePostDialog({ open, onOpenChange, onCancelHandler }) {
       setSelectedFiles([...event.target.files]);
     }
   };
-  console.log(selectedFiles);
+  
   const form=useForm()
   
   const submitHandler = (data) => {
-    console.log(data);
+    const {caption,postvisibility}=data;
+    
+   if(selectedFiles.length!==0)
+   {
+    const postData=postServ.createPost(userData.$id,selectedFiles,caption,postvisibility);
+    postData.then((data)=>{
+      if(data)
+      {
+        form.reset()
+        setSelectedFiles([])
+      }
+    }).catch((err)=>{console.log(err);})
+   }
+
+
+     
+
+    
   } 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
