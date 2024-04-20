@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { useForm,Controller } from 'react-hook-form';
 import { useContext, useState } from 'react';
 import { toast } from 'sonner';
-
+import { useNavigate } from 'react-router-dom';
 import {
   Select,
   SelectContent,
@@ -27,6 +27,7 @@ import PostService from '@/appwrite/PostService';
 import { dialogContext } from '@/context/dialogContext';
 
 function CreatePostDialog() {
+  const navigate=useNavigate();
   const postServ=new PostService()
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [dragActive, setDragActive] = useState(false);
@@ -56,22 +57,32 @@ function CreatePostDialog() {
   };
   
   const form=useForm()
-  
   const submitHandler = (data) => {
     const {caption,postvisibility}=data;
-    
    if(selectedFiles.length!==0)
    {
     const postData=postServ.createPost(userData.$id,selectedFiles,caption,postvisibility);
-    postData.then((data)=>{
-      if(data)
-      {
-        form.reset()
-        setSelectedFiles([])
-        setPostDialogOpen(false);
-        toast('created Post successfully',{description:'you can view them in your profile now'})
-      }
-    }).catch((err)=>{console.log(err);})
+    postData
+      .then((data) => {
+        if (data) {
+          form.reset();
+          setSelectedFiles([]);
+          setPostDialogOpen(false);
+          toast('created Post successfully', {
+            description: 'you can view them in your profile now',
+            action: {
+              label: 'View Post',
+              onClick: () => {
+                navigate('/ownprofile/posts');
+              }
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast('Something went wrong',{description:`${err.message}`});
+      });
    }
   } 
   return (
