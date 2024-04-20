@@ -10,6 +10,7 @@ import ProtectedAuth from './Auth/ProtectedAuth.jsx';
 import Home from './pages/Home.jsx';
 import SetProfile from './pages/SetProfile.jsx';
 import { Toaster } from "@/shadcomponents/ui/toaster"
+import { Toaster as Sooner } from "@/shadcomponents/ui/sonner"
 import SetDisplayPicture from './pages/SetDisplayPicture.jsx';
 import SetCoverPicture from './pages/SetCoverPicture.jsx';
 import Feed from './pages/Feed.jsx';
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
         path: '/register',
         element: <Register />
       },
+
       {
         path: '/',
         element:<ProtectedAuth> <Feed /></ProtectedAuth>
@@ -56,6 +58,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
 <Provider store={store}>
   <RouterProvider router={router} />
-  <Toaster/>
+  <Toaster />
+  <Sooner />
 </Provider>
 );

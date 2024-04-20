@@ -8,6 +8,7 @@ import DisplayPicture from '@/components/DisplayPicture';
 import { useSelector } from 'react-redux';
 import { useForm,Controller } from 'react-hook-form';
 import { useContext, useState } from 'react';
+import { toast } from 'sonner';
 
 import {
   Select,
@@ -68,14 +69,10 @@ function CreatePostDialog() {
         form.reset()
         setSelectedFiles([])
         setPostDialogOpen(false);
+        toast('created Post successfully',{description:'you can view them in your profile now'})
       }
     }).catch((err)=>{console.log(err);})
    }
-
-
-     
-
-    
   } 
   return (
     <AlertDialog open={postDialogOpen}>
@@ -83,7 +80,7 @@ function CreatePostDialog() {
         <div className={`h-10  flex justify-center items-center border-b-2`}>
           <h1 className="font-bold text-lg">Create Post</h1>
           <Button
-            onClick={()=>{setPostDialogOpen(false)}}
+            onClick={()=>{setPostDialogOpen(false);form.reset(); setSelectedFiles([])}}
             variant="ghost"
             className="w-14 h-14 rounded-full relative left-32">
             <X />
