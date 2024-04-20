@@ -5,10 +5,10 @@ import { login } from '@/stateManager/redux/authSlice';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useToast } from "@/shadcomponents/ui/use-toast"
+import { toast } from 'sonner';
 import UserService from '@/appwrite/UserService';
 function Login() {
-  const { toast } = useToast()
+  // const { toast } = useToast()
   const {
     register,
     handleSubmit,
@@ -44,16 +44,9 @@ function Login() {
           },1500)
           userService.checkUserDisplay().then(resp=>{console.log(resp)}).catch(err=>{console.log(err)})
          setIsSubmitSuccessful(true)
-         toast({
-          title:'Login Successful',
-          description:'Redirecting to profile',
-         })
+        toast('Login Successful',{description:'Redirecting to profile'})
        }else{
-        toast({
-          variant: "destructive",
-          title:'Login Unsuccessful',
-          description:'Please Try again',
-         })
+        toast('Login Unsuccessful',{description:'Please Try Again'})
          setIsSubmitSuccessful(false)
        }
        }).catch((error)=>{

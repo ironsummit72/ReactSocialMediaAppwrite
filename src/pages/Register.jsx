@@ -3,14 +3,13 @@ import { Link,useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import AuthService from '@/appwrite/AuthService'
 import { useState } from 'react';
-import AlertDialog from '@/components/Alert';
 import UserService from '@/appwrite/UserService';
+import { toast } from 'sonner';
 function Register() {
   const authService=new AuthService();
   const userService=new UserService();
   const navigate=useNavigate()
   const [error,setErrorMessage]=useState('');
-  const [registerSuccess,setRegisterSuccess]=useState(false);
   const {
     register,
     handleSubmit,
@@ -18,10 +17,8 @@ function Register() {
     watch,
     reset
   } = useForm();
-
   const submitHandler =  (data) => {
     const { username, email, password, firstname, lastname } = data;
-    // const response = await account.create(`[${username}]`, `${email}`, `${password}`);
     const authRes =  authService.createUserAccount(
       username,
       firstname + ' ' + lastname,
@@ -31,13 +28,12 @@ function Register() {
   authRes.then((registerResponse)=>{
     if(registerResponse)
     {
-      console.log(registerResponse);
       userService.createUser(registerResponse.$id)
-      setRegisterSuccess(true)
+      toast('Account Created Successfully',{description:'registered successfully redirecting to login page',action:{label:'login',onClick:()=>{navigate('/login',{replace:true})}}})
       reset()
       setTimeout(()=>{
         navigate('/login',{replace:true})
-      },1500)
+      },2000)
     }
   }).catch((err)=>{
     console.log(err.message);
@@ -216,7 +212,6 @@ function Register() {
               </form>
             </div>
           </div>
-          {registerSuccess&&<AlertDialog className={'w-[50%] bg-green-50 text-green-600 '} title={'Register Success'} description={'registered successfully redirecting to login page'}/>}
         </div>
       </section>
     </>
