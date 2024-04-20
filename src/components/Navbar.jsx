@@ -6,6 +6,7 @@ import { IoPeopleOutline } from 'react-icons/io5';
 import { MdOndemandVideo } from 'react-icons/md';
 import { Bell, MessageSquare, Menu } from 'lucide-react';
 import DisplayPicture from './DisplayPicture';
+import ProfileDropDown from './DropDowns/ProfileDropDown';
 function Navbar() {
   return (
     <>
@@ -50,7 +51,9 @@ function Navbar() {
               <MessageSquare fill={'true'} size={25} />
             </div>
             <div className="notification h-10 w-10 bg-slate-300 rounded-full flex justify-center items-center">
+             <ProfileDropDown>
              <DisplayPicture className="w-full h-full rounded-full "/>
+             </ProfileDropDown>
             </div>
           </div>
         </div>
