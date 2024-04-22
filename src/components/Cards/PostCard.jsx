@@ -15,18 +15,17 @@ import {
   CarouselPrevious
 } from '@/shadcomponents/ui/carousel';
 
-
 import { Heart, ExternalLink, MessageCircle } from 'lucide-react';
 import { Button } from '@/shadcomponents/ui/button';
 import FileService from '@/appwrite/FileService';
 import envconf from '@/conf/envConf';
 import axios from 'axios';
-import { useEffect, useState,useRef } from 'react';
+import { useEffect, useState } from 'react';
+import VideoPlayer from '../VideoPlayer';
 
 function PostCard({ users, caption, filesId, createdAt }) {
   const [filesContent, setFilesContent] = useState([]);
-  const videoref=useRef()
-  const [api, setApi] = useState()
+  const [api, setApi] = useState();
   const fileService = new FileService();
   const getDate = (createdAt) => {
     const date = new Date(createdAt);
@@ -39,25 +38,25 @@ function PostCard({ users, caption, filesId, createdAt }) {
         .get(fileService.getFileView(envconf.appWriteBucketIdUsersPost, files).href)
         .then((response) => {
           const contentType = response.headers['content-type'];
-          setFilesContent(content=>[...content,{
-            contentType,
-            fileId: files
-          }])
+          setFilesContent((content) => [
+            ...content,
+            {
+              contentType,
+              fileId: files
+            }
+          ]);
         });
     }
   }, []);
-useEffect(() => {
-  if (!api) {
-    return
-  }
-  // api.on('slidesInView',()=>{
-  //   videoref?.current.play()
-  // })
-  api.on("select", () => {
-    videoref?.current.play()
-  })
-
-}, [api]);
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+    api.on('slidesInView', () => {});
+    // api.on("select", () => {
+    //   videoref?.current.play()
+    // })
+  }, [api]);
 
   return (
     <>
@@ -73,7 +72,7 @@ useEffect(() => {
               alt=""
             />
             <div>
-              <CardTitle>{users.username}</CardTitle>
+              <CardTitle>{users.name}</CardTitle>
               <CardDescription>{getDate(createdAt)}</CardDescription>
             </div>
           </div>
@@ -101,13 +100,13 @@ useEffect(() => {
                 } else {
                   return (
                     <CarouselItem key={content.fileId}>
-                      <video  ref={videoref}   onMouseEnter={()=>{videoref?.current.play()}} onMouseOut={()=>{videoref?.current.pause()}}                  
+                      <VideoPlayer
+                        autoPlay={true}
+                        className={`max-w-[100%] rounded-md`}
                         src={fileService.getFileView(
                           envconf.appWriteBucketIdUsersPost,
                           content.fileId
                         )}
-                        className="max-w-[100%]"
-                        alt=""
                       />
                     </CarouselItem>
                   );
