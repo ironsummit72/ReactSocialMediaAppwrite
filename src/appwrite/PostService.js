@@ -90,5 +90,15 @@ export default class PostService extends AppwriteService {
     console.log(createPostData);
     return createPostData;
   }
+  async getPosts()
+  {
+   const data=await this.databases.listDocuments(
+      envconf.appWriteDatabase,
+      envconf.appWriteCollectionIdPost,
+      []
+    );
+    console.log(data);
+    return data;
+  }
 
 }
