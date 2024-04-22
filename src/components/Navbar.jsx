@@ -51,7 +51,7 @@ function Navbar() {
               <MessageSquare fill={'true'} size={25} />
             </div>
             <div className="notification h-10 w-10 bg-slate-300 rounded-full flex justify-center items-center">
-             <ProfileDropDown>
+             <ProfileDropDown className='w-24 h-24'>
              <DisplayPicture className="w-full h-full rounded-full "/>
              </ProfileDropDown>
             </div>
