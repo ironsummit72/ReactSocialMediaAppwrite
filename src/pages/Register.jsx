@@ -28,7 +28,7 @@ function Register() {
   authRes.then((registerResponse)=>{
     if(registerResponse)
     {
-      userService.createUser(registerResponse.$id)
+      userService.createUser(registerResponse.$id,registerResponse.name)
       toast('Account Created Successfully',{description:'registered successfully redirecting to login page',action:{label:'login',onClick:()=>{navigate('/login',{replace:true})}}})
       reset()
       setTimeout(()=>{
